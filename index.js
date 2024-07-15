@@ -25,10 +25,6 @@ class Book {
     }
 }
 
-const book1 = new Book('1984', '01', '1');
-const book2 = new Book('Hello', 'AH', '2');
-
-
 
 class User {
     constructor(name, id) {
@@ -41,8 +37,6 @@ class User {
         return `${this.name}, ID : ${this.id}`;
     }
 }
-
-
 
 
 class Member extends User {
@@ -74,7 +68,6 @@ class Member extends User {
 }
 
 
-
 class Librarian extends User {
     constructor(name, id, library) {
         super(name, id, library);
@@ -83,22 +76,35 @@ class Librarian extends User {
 
     addBook(book) {
         this.library.books.push(book);
+        return `${book.title} has been to the library`;
     }
 
     removeBook(book) {
-
+        const index = this.library.book.indexOf(book);
+        if (index !== -1) {
+            this.library.Book.splice(index, 1);
+            return `${book.title} has been removed from the library`;
+        } else {
+            return `${book.title} is not in the library`;
+        }
     }
 
     lendBook(book, member) {
-
+        if (this.library.books.includes(book) && book.available) {
+            member.borrowBooks(book);
+            return `${book.title} has been lent to ${member.name}`;
+        } else {
+            return `${book.title} is unavailable or not in the library`;
+        }
     }
 
     receiveBook(book) {
-
+        book.returnBook();
+        return `${book.title} has been received into the library`;
     }
 }
 
-class library {
+class Library {
     constructor(name) {
        this.name = name;
        this.books = [];
@@ -106,24 +112,59 @@ class library {
     }
 
     registerMember(member) {
-
+        this.members.push(member);
+        return `${member.name} has been registered as member of ${this.members}`
     }
 
     unRegisterMember(member) {
-
+        const index = this.members.indexOf(member);
+        if (index !== -1) {
+            this.members.splice(index, 1);
+            return `${member.name} has been unregistered from ${this.name}`;
+        } else {
+            return `${member.name} is not member of library`;
+        }
     }
 
     findBookTitle(title) {
-
+        return this.books.find(book => book.title === title);
     }
 
     findBookISBN() {
-        
+        return this.books.find(book => book.isbn === isbn);
     }
 }
 
 
+const library = new Library('Vitebsk Library');
+console.log(library);
 
-const user1 = new Member('Stan', 1);
+const librarian = new Librarian('John', 'lib001', library);
+console.log(librarian);
 
-const user2 = new Member('Dima', '2');
+const member = new Member('Alice', 'mem001');
+console.log(member);
+
+const book1 = new Book('1984', 'orwell', '12345');
+const book2 = new Book('Brave new World', 'huxley', '67890');
+console.log(book1);
+console.log(book2);
+
+console.log(librarian.addBook(book1));
+console.log(librarian.addBook(book2));
+
+console.log(library.registerMember(member));
+
+console.log(member.borrowBooks(book1));
+// console.log(member.borrowBooks(book2));
+
+console.log(librarian.lendBook(book2, member));
+console.log(librarian.receiveBook(book2));
+
+
+
+
+
+
+
+
